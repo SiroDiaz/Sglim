@@ -1,0 +1,12 @@
+{
+    "name": "sglim/sglim",
+    "description": "A simple PHP MVC skeleton build on top of Slim",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Siro Diaz",
+            "email": "siro_diaz@yahoo.com"
+        }
+    ],
+    "require": {}
+}
