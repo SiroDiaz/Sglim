@@ -6,14 +6,33 @@ define('ENVIRONMENT', 'development');   // production or development
 // the path to route files
 define('TEMPLATEPATH', dirname(__FILE__) .'/App/Routes/');
 
+$config = null;
+
 if(ENVIRONMENT === 'development') {
+    // enable errors display
     ini_set('display_errors', 'On');
     error_reporting(E_ALL);
+
+    $config = Config::load('config/config_development.php');
 } elseif(ENVIRONMENT === 'production') {
+    // disable errors display
+    ini_set('display_errors', 'Off');
     error_reporting(0);
+
+    $config = Config::load('config/config_production.php');
 } else {
+    $config = Config::load('config/config_production.php');
+    ini_set('display_errors', 'Off');
     error_reporting(0);
 }
+
+header_remove('X-Powered-By');
+
+/**********************
+ * START SESSION HERE *
+**********************/
+// session_name('session');
+// session_start();
 
 // Create Slim app
 $app = new \Slim\App();
