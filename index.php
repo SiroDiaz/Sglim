@@ -45,7 +45,7 @@ $container = $app->getContainer();
 // Register Twig View helper
 $container['view'] = function($c) {
     $view = new \Slim\Views\Twig(TEMPLATEPATH, [
-        'cache' => 'storage/cache'
+        'cache' => BASEPATH .'/storage/cache'
     ]);
 
     // Instantiate and add Slim specific extension
@@ -55,6 +55,7 @@ $container['view'] = function($c) {
     return $view;
 };
 
+// Register PDO instance to Slim
 $container['db'] = function($c) use ($config) {
     $dsn = $config->get('db.driver');
     $dsn .= ':dbname='. $config->get('db.database') .';';
