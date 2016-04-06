@@ -72,7 +72,7 @@ $container['db'] = function($c) use ($config) {
 // Register middlewares
 $app->add(Auth::class);
 
-// load the all route files
+// Load all route files
 foreach(glob(BASEPATH .'/App/Routes/*.route.php') as $route) {
     require $route;
 }
