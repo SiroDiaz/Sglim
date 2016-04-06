@@ -3,6 +3,7 @@
 require 'vendor/autoload.php';
 
 use Noodlehaus\Config;
+use App\Middlewares\Auth;
 
 define('ENVIRONMENT', 'development');   // production or development
 // the path to route files
@@ -34,8 +35,8 @@ header_remove('X-Powered-By');
 /**********************
  * START SESSION HERE *
 **********************/
-// session_name('session');
-// session_start();
+session_name('session');
+session_start();
 
 // Create Slim app
 $app = new \Slim\App($config->get('app'));
@@ -67,6 +68,9 @@ $container['db'] = function($c) use ($config) {
 
     return $db;
 };
+
+// Register middlewares
+$app->add(Auth::class);
 
 // load the all route files
 foreach(glob(BASEPATH .'/App/Routes/*.route.php') as $route) {

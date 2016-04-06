@@ -7,4 +7,4 @@ $app->get('/', function($req, $res, $args) {
     // $users = $mymodel->getAllUsers();
     
     return $this->view->render($res, 'index.html', []);
-});
+})->setName('index');
