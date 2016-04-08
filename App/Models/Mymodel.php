@@ -1,11 +1,9 @@
 <?php
 namespace App\Models;
 
-class Mymodel {
-    private $db;
-
+class Mymodel extends Model {
     public function __construct($db) {
-        $this->db = $db;
+        parent::__construct($db);
     }
 
     public function getAllUsers() {

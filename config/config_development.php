@@ -7,7 +7,7 @@ return [
         'database' => 'sglim',
         'port' => '3306',
         'username' => 'root',
-        'password' => '',
+        'password' => 'root',
         'charset' => 'utf8'
     ],
     'app' => [

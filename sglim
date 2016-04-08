@@ -2,3 +2,60 @@
 <?php
 
 require 'vendor/autoload.php';
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+class RouteCommand extends Command {
+	
+	protected function configure() {
+		$this->setName('make:route')
+			->setDescription('Generate a new route')
+			->addArgument(
+				'name',
+				InputArgument::OPTIONAL
+			);
+	}
+	
+
+	protected function execute(InputInterface $input, OutputInterface $output) {
+		$routeName = $input->getArgument('name');
+		
+		if($routeName) {
+			$output->writeln("<info>new controller {$routeName}</info>");
+		} else {
+			$output->writeln("blank controller");
+		}
+	}
+}
+
+class ModelCommand extends Command {
+	protected function configure() {
+		$this->setName('make:model')
+			->setDescription('Generate a new model');
+	}
+}
+
+$argv = new ArgvInput();
+echo $argv->getFirstArgument();
+
+switch ($) {
+	case 'make:route':
+		# code...
+		break;
+	case 'make:model':
+
+		break;
+	default:
+		# code...
+		break;
+}
+
+#$application = new Application();
+#$application->add(new MakeCommand());
+#$application->run();
