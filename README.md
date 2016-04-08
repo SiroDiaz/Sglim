@@ -32,7 +32,7 @@ $ php -S 0.0.0.0:8000
 
 Sglim uses different folders to organize your project based in other frameworks structure.
 
-- **App**, where is hosted main application folders as Routes, Models, Views, Api and Middlewares.
-- **config**, where you can find two configuration files: config_development and *config_production*. Both cantains database and Slim configuration and you can also set your Facebook, Twitter and other app secret keys.
+- **App**, where is hosted main application folders as *Models*, *Views*, *Routes*, *Api* and Middlewares.
+- **config**, where you can find two configuration files: *config_development* and *config_production*. Both cantains database and Slim configuration and you can also set your Facebook, Twitter and other app secret keys.
 - **public**. The folder where are all application frontend files.
 - **storage**. Storage contains all rendered all Twig views(cache) and log files.
