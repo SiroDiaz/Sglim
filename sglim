@@ -18,7 +18,7 @@ class RouteCommand extends Command {
 			->setDescription('Generate a new route')
 			->addArgument(
 				'name',
-				InputArgument::OPTIONAL
+				InputArgument::REQUIRED
 			);
 	}
 	
@@ -29,7 +29,7 @@ class RouteCommand extends Command {
 		if($routeName) {
 			$output->writeln("<info>new controller {$routeName}</info>");
 		} else {
-			$output->writeln("blank controller");
+			$output->writeln("<error>blank controller</error>");
 		}
 	}
 }
@@ -37,25 +37,37 @@ class RouteCommand extends Command {
 class ModelCommand extends Command {
 	protected function configure() {
 		$this->setName('make:model')
-			->setDescription('Generate a new model');
+			->setDescription('Generate a new model')
+			->addArgument(
+				'name',
+				InputArgument::REQUIRED
+			);
 	}
 }
 
 $argv = new ArgvInput();
-echo $argv->getFirstArgument();
+$command = $argv->getFirstArgument();
+$application = new Application();
 
-switch ($) {
+if(!$command || $command === 'help' || $command === 'h') {
+	echo "List of commands";
+}
+
+switch ($argv->getFirstArgument()) {
 	case 'make:route':
-		# code...
+		# generate route
 		break;
 	case 'make:model':
-
+		# generate model
+		break;
+	case 'make:view':
+		# generate Twig view
 		break;
 	default:
-		# code...
+		# error...
 		break;
 }
 
-#$application = new Application();
+#
 #$application->add(new MakeCommand());
 #$application->run();
