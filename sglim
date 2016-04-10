@@ -10,62 +10,77 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class RouteCommand extends Command {
-	
-	protected function configure() {
-		$this->setName('make:route')
-			->setDescription('Generate a new route')
-			->addArgument(
-				'name',
-				InputArgument::REQUIRED
-			);
-	}
-	
+    
+    protected function configure() {
+        $this->setName('make:route')
+            ->setDescription('Generate a new route')
+            ->addArgument(
+                'name',
+                InputArgument::REQUIRED
+            );
+    }
+    
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
-		$routeName = $input->getArgument('name');
-		
-		if($routeName) {
-			$output->writeln("<info>new controller {$routeName}</info>");
-		} else {
-			$output->writeln("<error>blank controller</error>");
-		}
-	}
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $routeName = $input->getArgument('name');
+
+        if($routeName) {
+            // if has any dot then explode and get the zero index
+            // check if the route file exists without .route.php
+            // if the route doesn't exist then create a new file with .route.php inside App/Routes folder
+            // then write inside the file the basic content of the route
+            $output->writeln("<info>new route {$routeName}</info>");
+        } else {
+            $output->writeln("<error>empty route</error>");
+        }
+    }
 }
 
 class ModelCommand extends Command {
-	protected function configure() {
-		$this->setName('make:model')
-			->setDescription('Generate a new model')
-			->addArgument(
-				'name',
-				InputArgument::REQUIRED
-			);
-	}
+    protected function configure() {
+        $this->setName('make:model')
+            ->setDescription('Generate a new model')
+            ->addArgument(
+                'name',
+                InputArgument::REQUIRED
+            );
+
+    }
 }
 
 $argv = new ArgvInput();
+$output = new ConsoleOutput();
+$commandList = <<<EOT
+
+Available commands:
+- <info>make:route</info>    Generate a new route file with the format *.route.php
+- <info>make:model</info>    Create a new model
+- <info>make:view</info>     Generate a new Twig template(HTML5 file)
+
+EOT;
 $command = $argv->getFirstArgument();
 $application = new Application();
 
 if(!$command || $command === 'help' || $command === 'h') {
-	echo "List of commands";
+    $output->writeln($commandList);
 }
 
-switch ($argv->getFirstArgument()) {
-	case 'make:route':
-		# generate route
-		break;
-	case 'make:model':
-		# generate model
-		break;
-	case 'make:view':
-		# generate Twig view
-		break;
-	default:
-		# error...
-		break;
+switch (strtolower($argv->getFirstArgument())) {
+    case 'make:route':
+        $application->add(new RouteCommand());
+        break;
+    case 'make:model':
+        # generate model
+        break;
+    case 'make:view':
+        # generate Twig view
+        break;
+    default:
+        # error...
+        break;
 }
 
 #
