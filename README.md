@@ -69,4 +69,4 @@ and if you love ORMs you can mix Sglim with the ORM that you want.*
 **Question 2**: Why doesn't Sglim include all Slim package like [Slim-Csrf](https://github.com/slimphp/Slim-Csrf)?
 *Because the Sglim idea is to keep it simple. But maybe in future commits i will set them to Sglim package*
 
-You can contact with me through Twitter([@Siro_Diaz](https://twitter.com/siro_diaz)) or email me &lt;siro_diaz@yahoo.com&gt
+You can contact with me through Twitter([@Siro_Diaz](https://twitter.com/siro_diaz)) or email me &lt;siro_diaz@yahoo.com&gt;
