@@ -58,13 +58,26 @@ $container['view'] = function($c) {
 
 // Register PDO instance to Slim
 $container['db'] = function($c) use ($config) {
-    $dsn = $config->get('db.driver');
-    $dsn .= ':dbname='. $config->get('db.database') .';';
-    $dsn .= 'host='. $config->get('db.host') .';';
-    $dsn .= 'port='. $config->get('db.port');
-
     $options = [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING];
-    $db = new PDO($dsn, $config->get('db.username'), $config->get('db.password'), $options);
+
+    try {
+        $db = new PDO(
+            sprintf(
+                "%s:dbname=%s;host=%s;port=%s;charset=%s",
+                $config->get('db.driver'),
+                $config->get('db.database'),
+                $config->get('db.host'),
+                $config->get('db.port'),
+                $config->get('db.charset')
+            ),
+            $config->get('db.username'),
+            $config->get('db.password'),
+            $options
+        );
+    } catch(PDOException $e) {
+        echo $e->getMessage();
+        exit;
+    }
 
     return $db;
 };
