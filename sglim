@@ -54,7 +54,7 @@ EOT;
                 $output->writeln("<error>File {$routeName}.route.php already exists</error>");
                 return;
             }
-            
+
             $output->writeln("<info>{$routeName}.route.php created</info>");
         } else {
             $output->writeln("<error>empty route name</error>");
@@ -75,7 +75,10 @@ class ModelCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $name = $input->getArgument('name');
-        $model = <<<EOT
+
+        if($name) {
+            $name = ucfirst($name);
+            $model = <<<EOT
 <?php
 namespace App\Models;
 
@@ -95,9 +98,38 @@ class $name extends Model {
     }
 }
 EOT;
+            
+            if(!file_exists(__DIR__ ."/App/Models/". $name .".php")) {
+                $file = fopen(__DIR__ ."/App/Models/". $name .".php", 'w');
+                fwrite($file, $model);
+            } else {
+                $output->writeln("<error>Model {$name}.php already exists</error>");
+                return;
+            }
+            
+            $output->writeln("<comment>Model {$name} generated</comment>");
+        }
+    }
+}
+
+class ViewCommand extends Command {
+    protected function configure() {
+        $this->setName('make:view')
+            ->setDescription('Generate a new HTML file')
+            ->addArgument(
+                'name',
+                InputArgument::REQUIRED
+            );
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $name = $input->getArgument('name');
+
         if($name) {
-            $output->writeln($model);
-            $output->writeln("<comment>{$name}</comment>");
+            $name = ucfirst($name);
+            $view = <<<EOT
+
+EOT;
         } else {
             $output->writeln();
         }
@@ -133,10 +165,8 @@ switch (strtolower($argv->getFirstArgument())) {
         # generate Twig view
         break;
     default:
-        # error...
+        // $output->writeln($commandList);
         break;
 }
 
-#
-#$application->add(new MakeCommand());
 $application->run();
