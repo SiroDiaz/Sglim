@@ -126,12 +126,30 @@ class ViewCommand extends Command {
         $name = $input->getArgument('name');
 
         if($name) {
-            $name = ucfirst($name);
             $view = <<<EOT
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <title>Welcome to Sglim</title>
+</head>
+<body>
+    
+</body>
+</html>
 
 EOT;
-        } else {
-            $output->writeln();
+            if(!file_exists(__DIR__ ."/App/Views/". $name .".html")) {
+                $file = fopen(__DIR__ ."/App/Views/". $name .".html", 'w');
+                fwrite($file, $view);
+            } else {
+                $output->writeln("<error>View {$name}.html already exists</error>");
+                return;
+            }
+            
+            $output->writeln("<comment>Template {$name} generated</comment>");
+
         }
     }
 }
@@ -159,10 +177,9 @@ switch (strtolower($argv->getFirstArgument())) {
         break;
     case 'make:model':
         $application->add(new ModelCommand());
-        # generate model
         break;
     case 'make:view':
-        # generate Twig view
+        $application->add(new ViewCommand());
         break;
     default:
         // $output->writeln($commandList);
