@@ -58,3 +58,15 @@ $ php sglim make:model model-name
 ``` bash
 $ php sglim make:view view-name
 ```
+
+## FAQ / Contact
+
+**Question 1**: Can i use an ORM instead of PDO extension?
+*Yes, you can. I tried using Eloquent(Lavel ORM) and i had to do minor changes in the index.php file.
+Only i had to add a charset option in the configuration file but it works properly. It is pretty simple
+and if you love ORMs you can mix Sglim with the ORM that you want.*
+
+**Question 2**: Why doesn't Sglim include all Slim package like [Slim-Csrf](https://github.com/slimphp/Slim-Csrf)?
+*Because the Sglim idea is to keep it simple. But maybe in future commits i will set them to Sglim package*
+
+You can contact with me through Twitter([@Siro_Diaz](https://twitter.com/siro_diaz)) or email me &lt;siro_diaz@yahoo.com&gt
