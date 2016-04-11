@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class RouteCommand extends Command {
-    
+
     protected function configure() {
         $this->setName('make:route')
             ->setDescription('Generate a new route')
@@ -28,18 +28,42 @@ class RouteCommand extends Command {
         $routeName = $input->getArgument('name');
 
         if($routeName) {
+            $route = <<<EOT
+<?php
+
+\$app->get('/', function(\$req, \$res, \$args) {
+    return \$res->getBody()->write("Hi there!");
+    return \$res;
+})->setName('my-route');
+
+EOT;
+            // capitalize the route name
+            $routeName = ucfirst($routeName);
             // if has any dot then explode and get the zero index
+            if(strpos($routeName, '.') !== false) {
+                $routeName = explode('.', $routeName)[0];
+            }
+
             // check if the route file exists without .route.php
-            // if the route doesn't exist then create a new file with .route.php inside App/Routes folder
-            // then write inside the file the basic content of the route
-            $output->writeln("<info>new route {$routeName}</info>");
+            if(!file_exists(__DIR__ ."/App/Routes/". $routeName .".route.php")) {
+                // if the route doesn't exist then create a new file with .route.php inside App/Routes folder
+                $file = fopen(__DIR__ ."/App/Routes/". $routeName .".route.php", 'w');
+                // then write inside the file the basic content of the route
+                fwrite($file, $route);
+            } else {
+                $output->writeln("<error>File {$routeName}.route.php already exists</error>");
+                return;
+            }
+            
+            $output->writeln("<info>{$routeName}.route.php created</info>");
         } else {
-            $output->writeln("<error>empty route</error>");
+            $output->writeln("<error>empty route name</error>");
         }
     }
 }
 
 class ModelCommand extends Command {
+
     protected function configure() {
         $this->setName('make:model')
             ->setDescription('Generate a new model')
@@ -47,7 +71,36 @@ class ModelCommand extends Command {
                 'name',
                 InputArgument::REQUIRED
             );
+    }
 
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $name = $input->getArgument('name');
+        $model = <<<EOT
+<?php
+namespace App\Models;
+
+class $name extends Model {
+    public function __construct(\$db) {
+        parent::__construct(\$db);
+    }
+
+    public function get$name() {
+        \$query = \$this->db->prepare('...');
+        \$result = \$query->execute();
+        if(\$result) {
+            return \$query->fetchAll();
+        }
+
+        return [];
+    }
+}
+EOT;
+        if($name) {
+            $output->writeln($model);
+            $output->writeln("<comment>{$name}</comment>");
+        } else {
+            $output->writeln();
+        }
     }
 }
 
@@ -73,6 +126,7 @@ switch (strtolower($argv->getFirstArgument())) {
         $application->add(new RouteCommand());
         break;
     case 'make:model':
+        $application->add(new ModelCommand());
         # generate model
         break;
     case 'make:view':
@@ -85,4 +139,4 @@ switch (strtolower($argv->getFirstArgument())) {
 
 #
 #$application->add(new MakeCommand());
-#$application->run();
+$application->run();
